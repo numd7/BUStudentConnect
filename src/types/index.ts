@@ -1,3 +1,9 @@
+export type INewFeedback = {
+  content: string;
+  title: string;
+  userId: string;
+}
+
 export type INavLink = {
   imgURL: string;
   route: string;

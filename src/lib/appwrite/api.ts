@@ -1,7 +1,7 @@
 import { ID, Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
-import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
+import { IUpdatePost, INewPost, INewUser, IUpdateUser, INewFeedback } from "@/types";
 
 // ============================================================
 // AUTH
@@ -581,21 +581,21 @@ export async function updateUser(user: IUpdateUser) {
 
 
 // ============================== LEAVE FEEDBACK
-export async function sendFeedback(userId: string, postId: string) {
+export async function createFeedback(feedback: INewFeedback) {
   try {
-    const updatedPost = await databases.createDocument(
+    // Create Feedback
+    const newFeedback = await databases.createDocument(
       appwriteConfig.databaseId,
-      appwriteConfig.savesCollectionId,
+      appwriteConfig.feedbackCollectionId,
       ID.unique(),
       {
-        user: userId,
-        post: postId,
+        creator: feedback.userId,
+        title: feedback.title,
+        content: feedback.content,
       }
     );
 
-    if (!updatedPost) throw Error;
-
-    return updatedPost;
+    return newFeedback;
   } catch (error) {
     console.log(error);
   }

@@ -25,8 +25,9 @@ import {
   searchPosts,
   savePost,
   deleteSavedPost,
+  createFeedback
 } from "@/lib/appwrite/api";
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import { INewFeedback, INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 
 // ============================================================
 // AUTH QUERIES
@@ -244,3 +245,20 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+// ============================================================
+// POST QUERIES
+// ============================================================
+
+export const useCreateFeedback = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (feedback: INewFeedback) => createFeedback(feedback),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FEEDBACK],
+      });
+    },
+  });
+};
+
